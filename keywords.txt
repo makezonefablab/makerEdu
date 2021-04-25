@@ -1,0 +1,34 @@
+###########################################
+# Syntax Coloring Map For kict_lib
+###########################################
+
+###########################################
+# Datatypes (KEYWORD1)
+###########################################
+Adafruit_NeoPixel	KEYWORD1
+makerEdu_lib	KEYWORD1	makerEdu_lib
+
+###########################################
+# Methods and Functions
+###########################################
+start		KEYWORD2
+start_led		KEYWORD2
+start_servo	KEYWORD2
+start_ultraSonic	KEYWORD2
+getDistance	KEYWORD2
+distance		KEYWORD2
+finish		KEYWORD2
+tempo		KEYWORD2
+buzzer		KEYWORD2
+note		KEYWORD2
+led		KEYWORD2
+ledBright		KEYWORD2
+servo		KEYWORD2
+lmotor		KEYWORD2
+rmotor		KEYWORD2
+wheel		KEYWORD2
+motor		KEYWORD2
+boolanalogRead	KEYWORD2
+###########################################
+# Constants (LITERAL1)
+###########################################
