@@ -1,4 +1,4 @@
-/*********KICT_makeShield_libraries V1.72*********/
+/*********makezone_Shield_libraries V1.82*********/
 /*V1.1
 //모터함수 속도 버그해결
 //beat 정의에 테누토 계산 수정
@@ -19,6 +19,7 @@
 // 조종기를 위한 라이브러리 추가
 /*V1.6
 // note함수에서 tone함수에 직접 접근할 수 있도록 변경(tempo를 1로함)
+*/
 /*V1.7
 // ws2812b 네오픽셀 제어함수 추가
 // tempo값이 1이고 음계가 쉼표일때 때 note함수는 noTone함수를 호출함 
@@ -27,13 +28,26 @@
 // start_led함수의 제어핀 셋업인자값 추가
 // 스트립led의 밝기 제어 함수명 수정 brightControl -> ledBright 
 */
+/*V1.73
+// 라이브러리 헤더이름을 kict_lib에서 makeEdu_lib로 변경
+*/
+/*V1.8
+// led스트립 제어함수 7종 추가
+// ledSpeed(), ledShow(), ledWipe(),ledTheaterChase(), 
+// ledRainbow(), ledRainbowCycle(), ledTheaterChaseRainbow() 추가
+*/
+/*V1.82
+// led_start()함수 수정
+// led 인스터스명 수정. strip->strip0(다중 인스턴스 사용)
+*/
+
 /************************************************
  * servo Constants
  ************************************************/
 #include <Servo.h>
 #include "Adafruit_NeoPixel.h"
 
-Adafruit_NeoPixel strip;  //ws2812b 스트립led의 인스턴스 선언
+Adafruit_NeoPixel strip0;  //ws2812b 스트립led의 인스턴스 선언
 Servo servo10;            //10번핀에 사용할 서보모터 이름
 Servo servo11;            //11번핀에 사용할 서보모터 이름
 Servo servo12;            //12번핀에 사용할 서보모터 이름
@@ -319,7 +333,7 @@ unsigned char rxmode = 0;
 /********************************************KICT_makeShield_libraries*************************************************************/
 
 float beatDuration, Tempo;                          //피에조버저를 사용하기 위한 광역변수
-unsigned char svCount, trigPin, echoPin;            //서보모터와 초음파센서를 사용하기 위한 광역변수
+unsigned char svCount, trigPin, echoPin, _flag;            //서보모터와 초음파센서를 사용하기 위한 광역변수
 
 void ledBright(unsigned char bright);              // ws2812b 밝기 조절
 void finish(void);
@@ -328,7 +342,7 @@ void duration(float beat);
 void note(int pitch, float beat);                  //피에조버저를 이용해 음계를 연주하는 함수(블럭에서는 NOTE_A3 ~ NOTE_C6까지만)
 void start(void);                                   //쉴드 초기화 함수(모터 포트와 버저포트를 셋업하고 멜로디연주속도를 지정함)
 float getDistance(void);
-void start_led(uint16_t count, int _pin);           //사용할 픽셀개수, 스트립연결핀번호(아날로그핀 가능)
+void start_led(uint16_t _pin, uint16_t count);           //led 초기화 
 void start_ultraSonic(char use, unsigned char trig, unsigned char echo);  //초음파센서 초기화 함수(사용유무, trig핀번호, echo핀번호);
 void start_servo(char num);                         //사용할 servo모터의 개수 초기화
 void buzzer(int onTime, int offTime);
@@ -340,23 +354,64 @@ void motor(int lspd, int rspd, unsigned int timer); //시간값을 정하면 지
 bool boolanalogRead(char Pin, unsigned int value);  //아날로그입력핀값을 기준값 value와 비교하여 bool값을 반환하는 함수
 void remocon(void);                                 //리모컨 사용을 위한 함수 
 void led(uint16_t n, int r, int g, int b);          //ws2812b 모듈 개별 제어 함수
+void ledWipe(int r, int g, int b, unsigned int t);
+void ledTheaterChase(int r, int g, int b, unsigned int t);
+void ledRainbow(unsigned int t);
+void ledRainbowCycle(unsigned int t);
+void ledRainbowTheaterChase(unsigned int t);
+void ledShow(void);
+void ledSpeed(unsigned char flag);
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void tempo(float playTempo)
 {
   Tempo = playTempo;
 }
 
+void ledSpeed(unsigned char flag)
+{
+  _flag = flag;
+}
+
 void ledBright(unsigned char bright)
 {
-  strip.setBrightness(bright);
+  strip0.setBrightness(bright);
 }
 
 void led(uint16_t n, int r, int g, int b)
 {
-  uint32_t colorVal = strip.Color(r, g, b); //Choose a color. It is based on RGB
-  strip.setPixelColor(n, colorVal); //Set a color to pixel(LED)
-  strip.show(); //Update
+  if(_flag == 0) strip0.showSinglePixel(n, strip0.Color(r, g, b));    // lowspeed single pixel control (include "show()")
+  else if(_flag == 1) strip0.setPixelColor(n, strip0.Color(r, g, b)); // highspeed single pixel control (Use "show()" individually)
+}
+void ledShow(void)
+{
+  strip0.show(); //Update
+}
+
+void ledWipe(int r, int g, int b, unsigned int t)
+{
+  strip0.colorWipe(strip0.Color(r, g, b), t);
+}
+
+void ledTheaterChase(int r, int g, int b, unsigned int t)
+{
+  strip0.theaterChase(strip0.Color(r, g, b), t);
+}
+
+void ledRainbow(unsigned int t)
+{
+  strip0.rainbow(t);
+}
+
+void ledRainbowCycle(unsigned int t)
+{
+  strip0.rainbowCycle(t);
+}
+
+void ledRainbowTheaterChase(unsigned int t)
+{
+  strip0.theaterChaseRainbow(t);
 }
 
 bool boolanalogRead(char Pin, unsigned int value)
@@ -382,12 +437,16 @@ void start(void)
   for(int i = 2; i < 14; i++) pinMode(i, OUTPUT);
   tempo(4);           // 곡의 전체적인 빠르기. 기본값은 4(실수로 표현가능) 숫자가 0에 수렴할수록 템포는 빨라짐
 }
-void start_led(uint16_t count, int _pin)
+void start_led(uint16_t _pin, uint16_t count)
 {
-  strip = Adafruit_NeoPixel(count, _pin, NEO_GRB + NEO_KHZ800);
-  ledBright(50);
-  strip.begin();
-  strip.show();
+  if(count > 0){
+    strip0 = Adafruit_NeoPixel(count, _pin, NEO_GRB + NEO_KHZ800);
+    ledBright(50);
+    strip0.begin();
+    strip0.show();
+    ledSpeed(0);
+  }
+  else if(count == 0) pinMode(13, OUTPUT);
 }
 
 void start_ultraSonic(char use, unsigned char trig, unsigned char echo)
@@ -504,10 +563,10 @@ void start_servo(char num)
   }
   else
   {
-   servo10.detach();
-   servo11.detach();
-   servo12.detach();
-   servo13.detach(); 
+    servo10.detach();
+    servo11.detach();
+    servo12.detach();
+    servo13.detach(); 
   }
 }
 
@@ -518,7 +577,6 @@ void servo(char num, int state)
     case 1:
       if((num == 10) && (state == -1)) servo10.attach(10);
       else if((num == 10) && (state == -2)) servo10.detach();
-
       else if((num == 10) && (state >= 0)) servo10.write(state);
       break;
 
@@ -577,13 +635,13 @@ void lMotor(int spd)
   {
     if(abs(spd)>=200) spd=210;
     else if(abs(spd)<=45) spd=45;
-      analogWrite(6,abs(spd));
-      digitalWrite(9,0);    
+    analogWrite(6,abs(spd));
+    digitalWrite(9,0);    
   }
   else
   {
-     digitalWrite(6,0);    
-     digitalWrite(9,0);         
+    digitalWrite(6,0);    
+    digitalWrite(9,0);         
   }
 }
 void rMotor(int spd)
@@ -593,20 +651,20 @@ void rMotor(int spd)
     if(spd > 200) spd=200;
     else if(spd < 45) spd=45;
     spd = 245-spd;        
-      analogWrite(5,spd);
-      digitalWrite(3,HIGH);
+    analogWrite(5,spd);
+    digitalWrite(3,HIGH);
   }  
   else if(spd < 0)
   {
     if(abs(spd)>=200) spd=210;
     else if(abs(spd)<=45) spd=45;    
-      analogWrite(5,abs(spd));
-      digitalWrite(3,0);    
+    analogWrite(5,abs(spd));
+    digitalWrite(3,0);    
   }
   else
   {
-     digitalWrite(3,0);    
-     digitalWrite(5,0);     
+    digitalWrite(3,0);    
+    digitalWrite(5,0);     
   }
 }
 

@@ -1,5 +1,5 @@
 ###########################################
-# Syntax Coloring Map For kict_lib
+# Syntax Coloring Map For makeEdu_lib
 ###########################################
 
 ###########################################
@@ -11,24 +11,31 @@ makerEdu_lib	KEYWORD1	makerEdu_lib
 ###########################################
 # Methods and Functions
 ###########################################
-start		KEYWORD2
-start_led		KEYWORD2
-start_servo	KEYWORD2
-start_ultraSonic	KEYWORD2
-getDistance	KEYWORD2
-distance		KEYWORD2
-finish		KEYWORD2
-tempo		KEYWORD2
-buzzer		KEYWORD2
-note		KEYWORD2
-led		KEYWORD2
-ledBright		KEYWORD2
-servo		KEYWORD2
-lmotor		KEYWORD2
-rmotor		KEYWORD2
-wheel		KEYWORD2
-motor		KEYWORD2
-boolanalogRead	KEYWORD2
+start				KEYWORD2
+start_led			KEYWORD2
+start_servo			KEYWORD2
+start_ultraSonic		KEYWORD2
+getDistance		KEYWORD2
+distance			KEYWORD2
+finish				KEYWORD2
+tempo			KEYWORD2
+buzzer			KEYWORD2
+note				KEYWORD2
+led				KEYWORD2
+ledSpeed 			KEYWORD2
+ledShow 			KEYWORD2
+ledBright			KEYWORD2
+ledWipe			KEYWORD2
+ledTheaterChase	KEYWORD2
+ledRainbow		KEYWORD2
+ledRainbowCycle	KEYWORD2
+ledRainbowTheaterChase	KEYWORD2
+servo				KEYWORD2
+lmotor			KEYWORD2
+rmotor			KEYWORD2
+wheel			KEYWORD2
+motor			KEYWORD2
+boolanalogRead		KEYWORD2
 ###########################################
 # Constants (LITERAL1)
 ###########################################

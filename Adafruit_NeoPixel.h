@@ -137,13 +137,13 @@ class Adafruit_NeoPixel {
 		int getCurrLED(int offset, int i);
 		int getPreLED(int currLED);
 		void racingPattern(int delay, int offset[], int lenght, int r[], int g[], int b[]);
-		void colorWipe(uint32_t c, uint8_t wait);
+		void colorWipe(uint32_t c, uint16_t wait);
 		void rainbow(uint8_t wait);
 		void rainbowCycle(uint8_t wait);
-		void theaterChase(uint32_t c, uint8_t wait);
+		void theaterChase(uint32_t c, uint16_t wait);
 		void theaterChaseRainbow(uint8_t wait);
   
-    void showSinglePixel(uint16_t n, uint32_t c, uint8_t wait);
+    void showSinglePixel(uint16_t n, uint32_t c);
 		void pattern1(int num, uint32_t c, uint8_t wait);
 		void pattern2(int num, uint8_t wait);
   

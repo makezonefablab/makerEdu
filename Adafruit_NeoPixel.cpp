@@ -161,13 +161,12 @@ void Adafruit_NeoPixel::pattern2(int num, uint8_t wait){
 	}
 }
 
-void Adafruit_NeoPixel::showSinglePixel(uint16_t n, uint32_t c, uint8_t wait){
+void Adafruit_NeoPixel::showSinglePixel(uint16_t n, uint32_t c){
   setPixelColor(n, c);
   show();
-  delay(wait);
 }
 
-void Adafruit_NeoPixel::colorWipe(uint32_t c, uint8_t wait) {
+void Adafruit_NeoPixel::colorWipe(uint32_t c, uint16_t wait) {
   for(uint16_t i=0; i<numPixels(); i++) {
     setPixelColor(i, c);
     show();
@@ -175,7 +174,7 @@ void Adafruit_NeoPixel::colorWipe(uint32_t c, uint8_t wait) {
   }
 }
 
-void Adafruit_NeoPixel::theaterChase(uint32_t c, uint8_t wait) {
+void Adafruit_NeoPixel::theaterChase(uint32_t c, uint16_t wait) {
   for (int j=0; j<10; j++) {  //do 10 cycles of chasing
     for (int q=0; q < 3; q++) {
       for (uint16_t i=0; i < numPixels(); i=i+3) {
