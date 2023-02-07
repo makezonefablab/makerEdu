@@ -1,4 +1,4 @@
-/*********makezone_Shield_libraries V1.82*********/
+/*********makezone_Shield_libraries V1.83*********/
 /*V1.1
 //모터함수 속도 버그해결
 //beat 정의에 테누토 계산 수정
@@ -38,9 +38,12 @@
 */
 /*V1.82
 // led_start()함수 수정
-// led 인스터스명 수정. strip->strip0(다중 인스턴스 사용) memo
+// led 인스터스명 수정. strip->strip0(다중 인스턴스 사용)
 */
-
+/*V1.83
+// buzzer함수 버그수정 - 울림시간 0에서 소리나는 문제
+// 
+*/
 /************************************************
  * servo Constants
  ************************************************/
@@ -435,6 +438,7 @@ void start(void)
  // int analogPin[]={A0,A1,A2,A3,A4,A5};
  // for(int i = 0; i < 6; i++) pinMode(analogPin[i], INPUT);
   for(int i = 2; i < 14; i++) pinMode(i, OUTPUT);
+ // for(int i = 0; i < 3; i++) buzzer(50, 100);
   tempo(4);           // 곡의 전체적인 빠르기. 기본값은 4(실수로 표현가능) 숫자가 0에 수렴할수록 템포는 빨라짐
 }
 void start_led(uint16_t _pin, uint16_t count)
@@ -505,14 +509,15 @@ void note(int pitch, float beat)
 
 void buzzer(int onTime, int offTime)
 {
-  if(offTime > 0)
+  if(onTime > 0 && offTime > 0)
   {
     tone(4, 440,0);
     delay(onTime);
     noTone(4);
     delay(offTime);
   }
-  else if(offTime == 0)
+  else if(onTime == 0 && offTime == 0) noTone(4);
+  else if(onTime > 0 && offTime == 0)
   {
     tone(4, 440,0);
     delay(onTime);
