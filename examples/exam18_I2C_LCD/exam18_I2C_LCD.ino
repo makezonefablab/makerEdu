@@ -16,7 +16,7 @@
 #include <Wire.h>                   // I2C통신을 위한 아두이노 라이브러리 호출
 #include <LiquidCrystal_I2C.h>   // I2C모듈을 이용한 LCD라이브러리 호출
 
-LiquidCrystal_I2C lcd(0x27, 16, 2); // 사용할 lcd의 인스턴스 이름을 lcd로 정하고 I2C주소를 0x27, LCD사이즈를 1602로 정함
+LiquidCrystal_I2C lcd(0x27, 16, 2); // LCD의 I2C주소를 0x27로 정하고 LCD사이즈를 1602로 정함
 // I2C용 lcd를 사용하기 위한 객체선언은 setup 전에 해야 함.
 
 void setup()

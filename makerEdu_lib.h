@@ -1,4 +1,4 @@
-/*********makezone_Shield_libraries V1.83*********/
+/*********makezone_Shield_libraries V1.82*********/
 /*V1.1
 //모터함수 속도 버그해결
 //beat 정의에 테누토 계산 수정
