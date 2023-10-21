@@ -44,6 +44,11 @@
 // buzzer함수 버그수정 - 울림시간 0에서 소리나는 문제
 // 
 */
+/*V1.84
+// note함수 버그수정 - tempo(1);일때 연속음 재생에서 지정시간값을 
+// 무시하는 버그 수정
+//
+*/
 /************************************************
  * servo Constants
  ************************************************/
@@ -471,7 +476,7 @@ void start_ultraSonic(char use, unsigned char trig, unsigned char echo)
 
 void finish(void)
 {
-  noTone(4);
+  if(Tempo != 1) noTone(4);
   for(int i = 10; i <=14; i++) {servo(i, OFF);}  
   for(int j = 2; j <14; j++)
   {
@@ -483,13 +488,16 @@ void finish(void)
 
 void duration(float beat)
 {
-  if(Tempo > 0) beatDuration = Tempo*(beat);
+  if(Tempo >= 1) beatDuration = Tempo*(beat);
   else if(Tempo == 0) beatDuration = beat;
 }
 
 void note(int pitch, float beat)
 {
-  if(Tempo == 1 && pitch > 0) tone(4, pitch, beatDuration);
+  if(Tempo == 1 && pitch > 0) {
+    duration(beat);
+    tone(4, pitch, beatDuration);
+  }
   else if (Tempo == 1 && pitch == 0) noTone(4);  
   else if(Tempo > 1)
   {
